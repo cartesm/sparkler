@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Document, Schema, model } from "mongoose";
 
-export interface Isers {
+export interface IUsers extends Document {
   userName: string;
   password: string;
   email: string;
   image: Buffer;
 }
 
-const userSchema = new Schema(
+const userSchema: Schema = new Schema(
   {
     userName: {
       type: String,
@@ -33,4 +33,4 @@ const userSchema = new Schema(
   }
 );
 
-export default model("user", userSchema);
+export default model<IUsers>("user", userSchema);

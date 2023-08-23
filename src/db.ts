@@ -3,7 +3,7 @@ import configs from "./config";
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(configs.db.uri);
+    await mongoose.connect(configs.db.uri + "sparkler");
     console.log("db is connected");
   } catch (err) {
     console.log("error to try connect db");
