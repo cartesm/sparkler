@@ -25,7 +25,10 @@ const userSchema: Schema = new Schema(
       min: 6,
     },
     options: {},
-    image: Buffer,
+    image: {
+      type: String,
+      default: "https://robohash.org/user-example",
+    },
   },
   {
     collection: "users",

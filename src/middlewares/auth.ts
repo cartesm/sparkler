@@ -2,18 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import configs from "../config";
 
-interface IuserReq extends Request {
-  user: {
-    id: string;
-    name: string;
-  };
-}
-
-const protectedRoutes = async (
-  req: IuserReq,
+const protectedRoutes = (
+  req: Request,
   resp: Response,
   next: NextFunction
-): Promise<any> => {
+): any | Response | NextFunction => {
   const { token } = req.cookies;
 
   if (!token) {
@@ -25,7 +18,6 @@ const protectedRoutes = async (
     if (err) {
       return resp.status(401).json({ message: "this token is not valid" });
     }
-    req.user = decoded;
   });
   next();
 };

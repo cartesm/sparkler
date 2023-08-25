@@ -1,16 +1,21 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import createToken from "../functions/createToken";
+import mongoose from "mongoose";
 import userModel, { IUsers } from "../models/user";
 
-// TODO: hacer imagen funcional despues
+import createToken from "../functions/createToken";
+import uploadImage from "../functions/uploadImage";
+
+// TODO: ver si la subida de imagenes funciona
 
 export const register = async (
   req: Request,
   resp: Response
 ): Promise<Response | any> => {
   try {
-    const { password, userName, email, image } = req.body;
+    const { password, userName, email } = req.body;
+    const imgMulter = req.file;
+
     if (!password || !userName || !email) {
       return resp.status(401).json({ message: "not data provided" });
     }
@@ -22,10 +27,12 @@ export const register = async (
 
     const passwordHash: string = await bcrypt.hash(password, 10);
 
+    const imgUrl = await uploadImage(imgMulter);
+
     const newUser: IUsers = new userModel({
       userName,
       email,
-      image,
+      image: imgUrl,
       password: passwordHash,
     });
 
@@ -97,10 +104,17 @@ export const logout = async (
   });
   return resp.status(200).json({ message: "loged out" });
 };
-/*
-export const deleteCount = async (req: Request, resp: Response) => {
+
+export const deleteCount = async (
+  req: Request,
+  resp: Response
+): Promise<Response | any> => {
   const { password } = req.body;
-  const { id } = req.user;
+  const { id } = req.params;
+
+  if (!mongoose.isValidObjectId(id)) {
+    return resp.status(401).json({ message: "params are been corrupted" });
+  }
 
   try {
     const userMatch: IUsers | any = await userModel.findOne({ _id: id });
@@ -116,12 +130,16 @@ export const deleteCount = async (req: Request, resp: Response) => {
       _id: userMatch._id,
     });
 
+    resp.clearCookie("token", {
+      expires: new Date(),
+    });
+
     return resp.status(202).json({
       userName: deletedUser.userName,
       email: deletedUser.email,
+      message: "user deleted",
     });
   } catch (err) {
     console.log(err);
   }
 };
-*/
