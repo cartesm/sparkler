@@ -18,6 +18,7 @@ const protectedRoutes = (
     if (err) {
       return resp.status(401).json({ message: "this token is not valid" });
     }
+    req.id = decoded;
   });
   next();
 };

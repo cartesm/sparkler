@@ -18,6 +18,6 @@ router.post("/logout", logout);
 
 
 
-router.delete("/deleteAcount/:id", auth, deleteCount);
+router.delete("/deleteAcount", auth, deleteCount);
 
 export default router;

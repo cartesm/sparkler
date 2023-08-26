@@ -9,17 +9,16 @@ import uploadImage from "../functions/uploadImage";
 // TODO: ver si la subida de imagenes funciona
 
 export const register = async (
-  req: Request ,
-  resp: Response 
+  req: Request,
+  resp: Response
 ): Promise<Response | any> => {
   try {
     const { password, userName, email } = req.body;
     const imgMulter = req.file;
 
-    console.log(imgMulter)
+    console.log(imgMulter);
 
-    if (!password || !userName || !email || !imgMulter) {
-      console.log("test");
+    if (!password || !userName || !email) {
       return resp.status(401).json({ message: "not data provided" });
     }
 
@@ -29,18 +28,22 @@ export const register = async (
     }
 
     const passwordHash: string = await bcrypt.hash(password, 10);
-
-    const imgUrl = await uploadImage(imgMulter);
-
     const newUser: IUsers = new userModel({
       userName,
       email,
-      image: imgUrl,
       password: passwordHash,
     });
 
-    //await newUser.save();
+    if (imgMulter) {
+      const imgUrl = await uploadImage(imgMulter);
+      if (typeof imgUrl != "string") {
+        return resp.status(406).json({ message: "error to try upload image" });
+      }
+      newUser.image = imgUrl;
+    }
 
+    await newUser.save();
+    console.log(newUser);
     const token: string = createToken({
       id: newUser._id,
       name: newUser.userName,
@@ -113,10 +116,10 @@ export const deleteCount = async (
   resp: Response
 ): Promise<Response | any> => {
   const { password } = req.body;
-  const { id } = req.params;
+  const id = req.id;
 
   if (!mongoose.isValidObjectId(id)) {
-    return resp.status(401).json({ message: "params are been corrupted" });
+    return resp.status(401).json({ message: "id are been corrupted" });
   }
 
   try {
