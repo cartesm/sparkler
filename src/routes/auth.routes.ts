@@ -14,7 +14,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 
 // TODO: ver si se pueden hacer mas tipos de validaciones
-// TODO: usar el mongoose.pre para encriptar mas automaticamente
 // TODO: crear rutas de actualizacion
 
 

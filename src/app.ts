@@ -15,34 +15,22 @@ const storage = multer.diskStorage({
     file: Express.Multer.File,
     callback: (error: Error | null, filename: string) => void
   ): void => {
-    callback(null, `${new Date()}-${file.originalname}`);
+    callback(null, file.originalname);
   },
   destination: (
     req: Request,
     file: Express.Multer.File,
     callback: (error: Error | null, filename: string) => void
   ): void => {
-    callback(null, path.join("src", "/temp"));
+    callback(null, path.join("src", "temp"));
   },
 });
-const fileFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  callback: (error: Error | null) => void
-) => {
-  const types = ["bmp", "jpg", "png", "tif", "jpge", "gif"];
-  let ext = path.extname(file.originalname);
-  console.log(ext);
 
-  if (!types.includes("." + ext)) {
-    return callback(new Error("type of this ´image´ is not admited"));
-  }
-  callback(null);
-};
 
 // middlewares
 server.use(
   cors({
+    origin: "http://localhost:5173",
     credentials: false,
   })
 );
@@ -60,9 +48,7 @@ server.use(morgan("dev"));
 server.use(
   multer({
     storage,
-    fileFilter,
-    dest: path.join("src", "temp"),
-  }).single("image")
+  }).single("img")
 );
 
 server.use(cookies());

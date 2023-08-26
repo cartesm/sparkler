@@ -9,14 +9,17 @@ import uploadImage from "../functions/uploadImage";
 // TODO: ver si la subida de imagenes funciona
 
 export const register = async (
-  req: Request,
-  resp: Response
+  req: Request ,
+  resp: Response 
 ): Promise<Response | any> => {
   try {
     const { password, userName, email } = req.body;
     const imgMulter = req.file;
 
-    if (!password || !userName || !email) {
+    console.log(imgMulter)
+
+    if (!password || !userName || !email || !imgMulter) {
+      console.log("test");
       return resp.status(401).json({ message: "not data provided" });
     }
 
@@ -36,7 +39,7 @@ export const register = async (
       password: passwordHash,
     });
 
-    await newUser.save();
+    //await newUser.save();
 
     const token: string = createToken({
       id: newUser._id,
