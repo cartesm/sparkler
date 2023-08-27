@@ -4,8 +4,9 @@ import express, { Request } from "express";
 import morgan from "morgan";
 import multer from "multer";
 import path from "path";
-import authRoutes from "./routes/auth.routes";
 
+import authRoutes from "./routes/auth.routes";
+import tasksRoutes from "./routes/tasks.routes";
 // initializations
 const server = express();
 
@@ -26,7 +27,6 @@ const storage = multer.diskStorage({
   },
 });
 
-
 // middlewares
 server.use(
   cors({
@@ -44,7 +44,7 @@ server.use(
 
 server.use(morgan("dev"));
 
-// TODO: ver como comocar limites de peso
+// TODO: ver como colocar limites de peso
 server.use(
   multer({
     storage,
@@ -55,5 +55,6 @@ server.use(cookies());
 
 // routes
 server.use(authRoutes);
+server.use(tasksRoutes);
 
 export default server;

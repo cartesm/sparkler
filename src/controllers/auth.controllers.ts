@@ -6,8 +6,6 @@ import userModel, { IUsers } from "../models/user";
 import createToken from "../functions/createToken";
 import uploadImage from "../functions/uploadImage";
 
-// TODO: ver si la subida de imagenes funciona
-
 export const register = async (
   req: Request,
   resp: Response
@@ -44,6 +42,7 @@ export const register = async (
 
     await newUser.save();
     console.log(newUser);
+
     const token: string = createToken({
       id: newUser._id,
       name: newUser.userName,
@@ -64,7 +63,6 @@ export const login = async (
   resp: Response
 ): Promise<Response | undefined> => {
   const { email, password } = req.body;
-
   if (!email || !password) {
     return resp.status(401).json({ message: "not data provided" });
   }
@@ -80,6 +78,8 @@ export const login = async (
     );
 
     if (!matchPassword) {
+      // agragar un intento cuando la contraseña sea incorrecta
+      req.counter++;
       return resp.status(401).json({ message: "the password is incorrect" });
     }
 
@@ -116,7 +116,7 @@ export const deleteCount = async (
   resp: Response
 ): Promise<Response | any> => {
   const { password } = req.body;
-  const id = req.id;
+  const id = req.user.id;
 
   if (!mongoose.isValidObjectId(id)) {
     return resp.status(401).json({ message: "id are been corrupted" });

@@ -6,17 +6,16 @@ import {
   register,
 } from "../controllers/auth.controllers";
 import auth from "../middlewares/auth";
+import attempsCounter from "../middlewares/authCounter";
 
 const router: Router = Router();
 
 router.post("/register", register);
-router.post("/login", login);
+router.post("/login", attempsCounter, login);
 router.post("/logout", logout);
 
-// TODO: ver si se pueden hacer mas tipos de validaciones
 // TODO: crear rutas de actualizacion
-
-
+// TODO: crear ruta para obtener los datos del usuario
 
 router.delete("/deleteAcount", auth, deleteCount);
 

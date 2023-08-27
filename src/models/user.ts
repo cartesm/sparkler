@@ -4,7 +4,8 @@ export interface IUsers extends Document {
   userName: string;
   password: string;
   email: string;
-  image: string ;
+  image: string;
+  user: string;
 }
 
 const userSchema: Schema = new Schema(
@@ -29,6 +30,7 @@ const userSchema: Schema = new Schema(
       type: String,
       default: "https://robohash.org/user-example",
     },
+    
   },
   {
     collection: "users",
@@ -36,4 +38,4 @@ const userSchema: Schema = new Schema(
   }
 );
 
-export default model<IUsers>("user", userSchema);
+export default model<IUsers>("users", userSchema);
