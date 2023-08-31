@@ -60,7 +60,9 @@ export const deleteAllTasks = async (
     return resp.status(401).json({ message: "this user is not auhenticated" });
   }
 
-  const tasksDeleted = await taskModel.deleteMany({ user: id });
+  const tasksDeleted = await taskModel.deleteMany({
+    user: id,
+  });
 
   return resp.status(200).json(tasksDeleted);
 };
@@ -83,7 +85,7 @@ export const updateTask = async (
 
   const { header, content, tittle } = req.body;
 
-  const updateTask = await taskModel.findOneAndUpdate(
+  const updateTask: ITask | null = await taskModel.findOneAndUpdate(
     { _id: id },
     { $set: { header, tittle, content } },
     { new: true }
@@ -102,7 +104,7 @@ export const getAllTask = async (
     return resp.status(401).json({ message: "this user is not auhenticated" });
   }
 
-  const matchsTask = await taskModel.find({ user: userID });
+  const matchsTask: Array<ITask> = await taskModel.find({ user: userID });
   if (matchsTask.length == 0) {
     return resp.status(204).json({ message: "not tasks in this user" });
   }
@@ -126,7 +128,7 @@ export const getOneTask = async (
     return resp.status(400).json({ message: "the params are been corrupted" });
   }
 
-  const taskMatch = await taskModel.findOne({ _id: id });
+  const taskMatch: ITask | null = await taskModel.findOne({ _id: id });
 
   return resp.status(200).json(taskMatch);
 };

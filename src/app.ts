@@ -7,6 +7,7 @@ import path from "path";
 
 import authRoutes from "./routes/auth.routes";
 import tasksRoutes from "./routes/tasks.routes";
+import todoRoutes from "./routes/todo.routes";
 // initializations
 const server = express();
 
@@ -56,5 +57,6 @@ server.use(cookies());
 // routes
 server.use(authRoutes);
 server.use(tasksRoutes);
+server.use(todoRoutes);
 
 export default server;
