@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteCount,
+  getUser,
   login,
   logout,
   register,
@@ -15,7 +16,8 @@ router.post("/login", attempsCounter, login);
 router.post("/logout", logout);
 
 // TODO: crear rutas de actualizacion
-// TODO: crear ruta para obtener los datos del usuario
+
+router.get("/get-user", auth, getUser);
 
 router.delete("/deleteAcount", auth, deleteCount);
 

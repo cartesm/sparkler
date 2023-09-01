@@ -149,3 +149,21 @@ export const deleteCount = async (
     console.log(err);
   }
 };
+
+export const getUser = async (
+  req: Request,
+  resp: Response
+): Promise<Response | void> => {
+  const { id: userID } = req.user;
+
+  if (!userID) {
+    return resp.status(401).json({ message: "user not autenticated" });
+  }
+  const matchUser: IUsers | null = await userModel.findOne({ _id: userID });
+
+  if (matchUser) {
+    matchUser.password = "";
+  }
+
+  return resp.status(200).json(matchUser);
+};
